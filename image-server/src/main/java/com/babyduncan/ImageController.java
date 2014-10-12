@@ -42,28 +42,52 @@ public class ImageController {
      * @param response
      * @return
      */
-    @RequestMapping(value = "/uploadFile", method = RequestMethod.POST)
-    public ModelAndView uploadMultiPartImage(@RequestParam MultipartFile[] myfiles, HttpServletRequest request, HttpServletResponse response) throws FileUploadException {
+    @RequestMapping(value = "/uploadFiles", method = RequestMethod.POST)
+    public ModelAndView uploadMultiPartImages(@RequestParam MultipartFile[] myFiles, HttpServletRequest request, HttpServletResponse response) throws FileUploadException {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("image");
         modelAndView.addObject("code", 0);
-        List<String> filenames = Lists.newArrayList();
-        for (MultipartFile myfile : myfiles) {
-            if (myfile.isEmpty()) {
+        List<String> fileNames = Lists.newArrayList();
+        for (MultipartFile myFile : myFiles) {
+            if (myFile.isEmpty()) {
                 continue;
             }
-            String fileName = processUploadedFile(myfile);
-            filenames.add(fileName);
+            String fileName = processUploadedFile(myFile);
+            fileNames.add(fileName);
         }
-        modelAndView.addObject("data", filenames);
+        modelAndView.addObject("data", fileNames);
         return modelAndView;
     }
 
-    private String processUploadedFile(MultipartFile myfile) {
-        String fileName__ = new StringBuilder().append(IMAGE_PREFIX).append(System.currentTimeMillis()).append(myfile.getOriginalFilename()).toString();
+    @RequestMapping(value = "/uploadFile", method = RequestMethod.POST)
+    public ModelAndView uploadMultiPartImage(@RequestParam MultipartFile myFile, HttpServletRequest request, HttpServletResponse response) throws FileUploadException {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("image");
+        modelAndView.addObject("code", 0);
+        if (!myFile.isEmpty()) {
+            String fileName = processUploadedFile(myFile);
+            modelAndView.addObject("data", fileName);
+        }
+        return modelAndView;
+    }
+
+    private String processUploadedFile(MultipartFile myFile) {
+        String fileName__ = new StringBuilder().append(IMAGE_PREFIX).append(System.currentTimeMillis()).append(myFile.getOriginalFilename()).toString();
         File uploadedFile = new File(new StringBuilder().append(IMAGE_DIR).append("/o/").append(fileName__).toString());
+        String uploadedFile175 = new StringBuilder().append(IMAGE_DIR).append("/l/").append(fileName__).toString();
+        String uploadedFile95 = new StringBuilder().append(IMAGE_DIR).append("/m/").append(fileName__).toString();
+        String uploadedFile55 = new StringBuilder().append(IMAGE_DIR).append("/s/").append(fileName__).toString();
         try {
-            FileUtils.copyInputStreamToFile(myfile.getInputStream(), uploadedFile);
+            FileUtils.copyInputStreamToFile(myFile.getInputStream(), uploadedFile);
+            EasyImage easyImage = new EasyImage(uploadedFile);
+            easyImage.resize(175, 175);
+            easyImage.saveAs(uploadedFile175);
+            easyImage = new EasyImage(uploadedFile);
+            easyImage.resize(95, 95);
+            easyImage.saveAs(uploadedFile95);
+            easyImage = new EasyImage(uploadedFile);
+            easyImage.resize(55, 55);
+            easyImage.saveAs(uploadedFile55);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
         }

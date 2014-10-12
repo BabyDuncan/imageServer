@@ -96,6 +96,10 @@ public class EasyImage {
     public void resize(int newWidth, int newHeight) {
         int oldWidth = bufferedImage.getWidth();
         int oldHeight = bufferedImage.getHeight();
+        if (newWidth > oldWidth || newHeight > oldHeight) {
+            newWidth = oldWidth;
+            newHeight = oldHeight;
+        }
         if (newWidth == -1 || newHeight == -1) {
             if (newWidth == -1) {
                 if (newHeight == -1) {
