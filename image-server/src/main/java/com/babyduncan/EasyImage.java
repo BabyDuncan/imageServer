@@ -15,7 +15,7 @@ import java.io.IOException;
 /**
  * User: guohaozhao (guohaozhao116008@sohu-inc.com)
  * Date: 10/12/14 12:57
- * image å¤„ç†ç±»
+ * image ´¦ÀíÀà
  */
 public class EasyImage {
 
@@ -393,8 +393,8 @@ public class EasyImage {
         if (endY == -1) {
             endY = height - 1;
         }
-        BufferedImage result = new BufferedImage(endX - startX + 1,
-                endY - startY + 1, bufferedImage.TYPE_INT_BGR);
+        BufferedImage result = new BufferedImage(endX - startX,
+                endY - startY, bufferedImage.TYPE_INT_BGR);
         for (int y = startY; y < endY; y++) {
             for (int x = startX; x < endX; x++) {
                 int rgb = bufferedImage.getRGB(x, y);
@@ -500,14 +500,101 @@ public class EasyImage {
         return bufferedImage.getHeight();
     }
 
+    public void toSquare() {
+        int height = getHeight();
+        int width = getWidth();
+        if (height > width) {
+            crop(1, (height - width) / 2, width, (height - width) / 2 + width);
+        } else {
+            crop((width - height) / 2, 1, (width - height) / 2 + height, height);
+        }
+
+    }
+
+    /**
+     * Ìí¼ÓÎÄ×ÖË®Ó¡
+     *
+     * @param pressText Ë®Ó¡ÎÄ×Ö
+     * @param x         Ë®Ó¡ÎÄ×Ö¾àÀëÄ¿±êÍ¼Æ¬×ó²àµÄÆ«ÒÆÁ¿
+     * @param y         Ë®Ó¡ÎÄ×Ö¾àÀëÄ¿±êÍ¼Æ¬ÉÏ²àµÄÆ«ÒÆÁ¿
+     */
+    public void pressText(String pressText, int x, int y) {
+        try {
+            int width = getWidth();
+            int height = getHeight();
+            if (width < 50 || height < 50) {
+                return;
+            }
+            int fontSize = 20;
+            Graphics2D g = bufferedImage.createGraphics();
+            g.drawImage(bufferedImage, 0, 0, width, height, null);
+            g.setFont(new Font("ËÎÌå", Font.BOLD, fontSize));
+            int width_1 = fontSize * getLength(pressText);
+            int height_1 = fontSize;
+            int widthDiff = width - width_1;
+            int heightDiff = height - height_1;
+            if (x < 0) {
+                x = widthDiff + x;
+            } else if (x > widthDiff) {
+                x = widthDiff;
+            }
+            if (y < 0) {
+                y = heightDiff + y;
+            } else if (y > heightDiff) {
+                y = heightDiff;
+            }
+            int rgb = bufferedImage.getRGB(x, y);
+            g.setColor(new Color(255 - rgb));
+            g.drawString(pressText, x, y + height_1);
+            g.dispose();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * ÓÒÏÂ½ÇÔö¼ÓË®Ó¡
+     *
+     * @param pressText
+     */
+    public void pressText(String pressText) {
+
+    }
+
+    public static int getLength(String text) {
+        int textLength = text.length();
+        int length = textLength;
+        for (int i = 0; i < textLength; i++) {
+            if (String.valueOf(text.charAt(i)).getBytes().length > 1) {
+                length++;
+            }
+        }
+        return (length % 2 == 0) ? length / 2 : length / 2 + 1;
+    }
+
+
     public static void main(String[] args) {
-        // å›¾ç‰‡çš„ç¼©æ”¾
+        // Í¼Æ¬µÄËõ·Å
+//        EasyImage easyImage = new EasyImage("/Users/babyduncan/github/imageServer/image-server/src/main/resources/image/food.jpg");
+//        easyImage.resize(50);
+//        easyImage.saveAs("/Users/babyduncan/github/imageServer/image-server/src/main/resources/image/food-50p.jpg");
+        //Í¼Æ¬µÄ¼ôÇĞ
+//        easyImage.crop(50, 50, 100, 100);
+//        easyImage.saveAs("/Users/babyduncan/github/imageServer/image-server/src/main/resources/image/food-c.jpg");
+//        logger.info("done !!");
+        //³¤·½ĞÎÍ¼Æ¬½ØÈ¡ÖĞ¼ä±ä³ÉÕı·½ĞÎ
+//        EasyImage easyImage__ = new EasyImage("/Users/babyduncan/github/imageServer/image-server/src/main/resources/image/meng.jpg");
+//        easyImage__.toSquare();
+//        easyImage__.saveAs("/Users/babyduncan/github/imageServer/image-server/src/main/resources/image/meng_s.jpg");
+//        EasyImage easyImage_ = new EasyImage("/Users/babyduncan/github/imageServer/image-server/src/main/resources/image/ali.jpg");
+//        easyImage_.toSquare();
+//        easyImage_.saveAs("/Users/babyduncan/github/imageServer/image-server/src/main/resources/image/ali_s.jpg");
+//        EasyImage easyImage = new EasyImage("/Users/babyduncan/github/imageServer/image-server/src/main/resources/image/food.jpg");
+//        easyImage.combineWithPicture("/Users/babyduncan/github/imageServer/image-server/src/main/resources/image/meng_s.jpg", 2);
+//        easyImage.saveAs("/Users/babyduncan/github/imageServer/image-server/src/main/resources/image/combine.jpg");
         EasyImage easyImage = new EasyImage("/Users/babyduncan/github/imageServer/image-server/src/main/resources/image/food.jpg");
-        easyImage.resize(50);
-        easyImage.saveAs("/Users/babyduncan/github/imageServer/image-server/src/main/resources/image/food-50p.jpg");
-        //å›¾ç‰‡çš„å‰ªåˆ‡
-        easyImage.crop(50, 50, 100, 100);
-        easyImage.saveAs("/Users/babyduncan/github/imageServer/image-server/src/main/resources/image/food-c.jpg");
+        easyImage.pressText("ÎÒÊÇË®Ó¡", 10, 10);
+        easyImage.saveAs("/Users/babyduncan/github/imageServer/image-server/src/main/resources/image/food_watermark.jpg");
         logger.info("done !!");
     }
 }
