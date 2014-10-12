@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+    <!--控制台输出-->
+    <appender name="console" class="org.apache.log4j.ConsoleAppender">
+        <param name="Threshold" value="INFO"></param>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d %-5p -> %m%n"/>
+        </layout>
+    </appender>
+    <!--本地日志配置-->
+    <appender name="localInfo" class="org.apache.log4j.DailyRollingFileAppender">
+        <param name="file" value="/opt/logs/image-server.info"/>
+        <param name="append" value="true"/>
+        <param name="datePattern" value="'.'yyyy-MM-dd"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="[%-5p][ %t ] [%d{yyyy-MM-dd HH:mm:ss}] %c{3}.%M(%L) - %m%n"/>
+        </layout>
+        <filter class="org.apache.log4j.varia.LevelRangeFilter">
+            <param name="LevelMin" value="INFO"/>
+            <param name="LevelMax" value="INFO"/>
+            <param name="AcceptOnMatch" value="true"/>
+        </filter>
+    </appender>
+    <!--本地错误日志配置-->
+    <appender name="localError" class="org.apache.log4j.DailyRollingFileAppender">
+        <param name="file" value="/opt/logs/image-server.error"/>
+        <param name="append" value="true"/>
+        <param name="datePattern" value="'.'yyyy-MM-dd"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="[%-5p][ %t ] [%d{yyyy-MM-dd HH:mm:ss}] %c{3}.%M(%L) - %m%n"/>
+        </layout>
+        <filter class="org.apache.log4j.varia.LevelRangeFilter">
+            <param name="LevelMin" value="ERROR"/>
+            <param name="LevelMax" value="ERROR"/>
+            <param name="AcceptOnMatch" value="true"/>
+        </filter>
+    </appender>
+    <root>
+        <level value="INFO"/>
+        <appender-ref ref="localInfo"/>
+        <appender-ref ref="localError"/>
+        <appender-ref ref="console"/>
+    </root>
+</log4j:configuration>
