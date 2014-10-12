@@ -8,8 +8,7 @@
     <context:component-scan base-package="com.babyduncan"/>
     <context:annotation-config/>
 
-
-    <bean id="keywordUtil" class="com.babyduncan.LogInitUtil" init-method="init">
+    <bean id="logInitUtil" class="com.babyduncan.LogInitUtil" init-method="init">
     </bean>
 
 </beans>
