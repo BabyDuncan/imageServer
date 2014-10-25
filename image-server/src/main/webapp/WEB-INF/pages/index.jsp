@@ -17,14 +17,14 @@
 </h1>
 
 <body>
-<form method="post" name="fileUpload" enctype="multipart/form-data" action="/uploadFiles">
+<form method="post" name="fileUpload" enctype="multipart/form-data" action="/imageserver/uploadFiles">
     <input type="file" name="myFiles"/><br>
     <input type="file" name="myFiles"/><br>
     <input type="file" name="myFiles"/><br>
     <input type="submit" name="submit" value="提交">
 </form>
 <hr/>
-<form method="post" name="fileUpload" enctype="multipart/form-data" action="/uploadFile">
+<form method="post" name="fileUpload" enctype="multipart/form-data" action="/imageserver/uploadFile">
     <input type="file" name="myFile"/><br>
     <input type="submit" name="submit" value="提交">
 </form>
