@@ -77,6 +77,7 @@ public class ImageController {
             String fileName = processUploadedFile(myFile);
             Map<String, String> map = new HashMap<String, String>();
             map.put("image", new StringBuilder().append(IMAGE_SERVER).append("/o/").append(fileName).toString());
+            modelAndView.addObject("message", "upload success");
             modelAndView.addObject("data", JSON.toJSONString(map));
         } else {
             modelAndView.addObject("code", 1);
@@ -97,8 +98,8 @@ public class ImageController {
             map.put("avatar", new StringBuilder().append(IMAGE_SERVER).append("/l/").append(fileName).toString());
             map.put("image", new StringBuilder().append(IMAGE_SERVER).append("/m/").append(fileName).toString());
             map.put("icon", new StringBuilder().append(IMAGE_SERVER).append("/s/").append(fileName).toString());
+            modelAndView.addObject("message", "upload success");
             modelAndView.addObject("data", JSON.toJSONString(map));
-
         } else {
             modelAndView.addObject("code", 1);
             modelAndView.addObject("message", "file is null");
