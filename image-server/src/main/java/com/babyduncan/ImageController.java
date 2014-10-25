@@ -1,5 +1,6 @@
 package com.babyduncan;
 
+import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.io.FileUtils;
@@ -14,7 +15,9 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * User: guohaozhao (guohaozhao116008@sohu-inc.com)
@@ -26,6 +29,7 @@ public class ImageController {
     private static final Logger logger = Logger.getLogger(ImageController.class);
     private static final String IMAGE_PREFIX = "image";
     private static final String IMAGE_DIR = "/opt/image";
+    private static final String IMAGE_SERVER = "123.57.43.110";
 
     @RequestMapping(value = "/imageserver/index", method = RequestMethod.GET)
     public ModelAndView index(HttpServletRequest request, HttpServletResponse response) {
@@ -71,7 +75,7 @@ public class ImageController {
         modelAndView.addObject("code", 0);
         if (!myFile.isEmpty()) {
             String fileName = processUploadedFile(myFile);
-            modelAndView.addObject("data", fileName);
+            modelAndView.addObject("data", IMAGE_SERVER + "/o/" + fileName);
         } else {
             modelAndView.addObject("code", 1);
             modelAndView.addObject("message", "file is null");
@@ -86,7 +90,13 @@ public class ImageController {
         modelAndView.addObject("code", 0);
         if (!myFile.isEmpty()) {
             String fileName = processUploadedAvatar(myFile);
-            modelAndView.addObject("data", fileName);
+            Map<String, String> map = new HashMap<String, String>();
+            map.put("origin", IMAGE_SERVER + "/o/" + fileName);
+            map.put("avatar", IMAGE_SERVER + "/l/" + fileName);
+            map.put("image", IMAGE_SERVER + "/m/" + fileName);
+            map.put("icon", IMAGE_SERVER + "/s/" + fileName);
+            modelAndView.addObject("data", JSON.toJSONString(map));
+
         } else {
             modelAndView.addObject("code", 1);
             modelAndView.addObject("message", "file is null");
@@ -95,7 +105,7 @@ public class ImageController {
     }
 
     private String processUploadedAvatar(MultipartFile myFile) {
-        String fileName__ = new StringBuilder().append(IMAGE_PREFIX).append(System.currentTimeMillis()).toString();
+        String fileName__ = new StringBuilder().append(IMAGE_PREFIX).append(System.currentTimeMillis()).append(myFile.getOriginalFilename().substring(myFile.getOriginalFilename().lastIndexOf("."))).toString();
         File uploadedFile = new File(new StringBuilder().append(IMAGE_DIR).append("/o/").append(fileName__).toString());
         String uploadedFile175 = new StringBuilder().append(IMAGE_DIR).append("/l/").append(fileName__).toString();
         String uploadedFile95 = new StringBuilder().append(IMAGE_DIR).append("/m/").append(fileName__).toString();
@@ -118,7 +128,7 @@ public class ImageController {
     }
 
     private String processUploadedFile(MultipartFile myFile) {
-        String fileName__ = new StringBuilder().append(IMAGE_PREFIX).append(System.currentTimeMillis()).toString();
+        String fileName__ = new StringBuilder().append(IMAGE_PREFIX).append(System.currentTimeMillis()).append(myFile.getOriginalFilename().substring(myFile.getOriginalFilename().lastIndexOf("."))).toString();
         File uploadedFile = new File(new StringBuilder().append(IMAGE_DIR).append("/o/").append(fileName__).toString());
         try {
             FileUtils.copyInputStreamToFile(myFile.getInputStream(), uploadedFile);

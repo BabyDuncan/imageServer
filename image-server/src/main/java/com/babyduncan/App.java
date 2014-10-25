@@ -2,12 +2,12 @@ package com.babyduncan;
 
 /**
  * Hello world!
- *
  */
-public class App 
-{
-    public static void main( String[] args )
+public class App {
+    public static void main(String[] args)
+
     {
-        System.out.println( "Hello World!" );
+        String s = "foobar.jpg";
+        System.out.println(s.substring(s.lastIndexOf(".")));
     }
 }
