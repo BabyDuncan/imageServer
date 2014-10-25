@@ -71,7 +71,19 @@ public class ImageController {
         return modelAndView;
     }
 
-    private String processUploadedFile(MultipartFile myFile) {
+    @RequestMapping(value = "/imageserver/uploadAvatar", method = RequestMethod.POST)
+    public ModelAndView uploadMultiPartAvatar(@RequestParam MultipartFile myFile, HttpServletRequest request, HttpServletResponse response) throws FileUploadException {
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("image");
+        modelAndView.addObject("code", 0);
+        if (!myFile.isEmpty()) {
+            String fileName = processUploadedAvatar(myFile);
+            modelAndView.addObject("data", fileName);
+        }
+        return modelAndView;
+    }
+
+    private String processUploadedAvatar(MultipartFile myFile) {
         String fileName__ = new StringBuilder().append(IMAGE_PREFIX).append(System.currentTimeMillis()).append(myFile.getOriginalFilename()).toString();
         File uploadedFile = new File(new StringBuilder().append(IMAGE_DIR).append("/o/").append(fileName__).toString());
         String uploadedFile175 = new StringBuilder().append(IMAGE_DIR).append("/l/").append(fileName__).toString();
@@ -88,6 +100,17 @@ public class ImageController {
             easyImage = new EasyImage(uploadedFile);
             easyImage.resize(55, 55);
             easyImage.saveAs(uploadedFile55);
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+        }
+        return fileName__;
+    }
+
+    private String processUploadedFile(MultipartFile myFile) {
+        String fileName__ = new StringBuilder().append(IMAGE_PREFIX).append(System.currentTimeMillis()).append(myFile.getOriginalFilename()).toString();
+        File uploadedFile = new File(new StringBuilder().append(IMAGE_DIR).append("/o/").append(fileName__).toString());
+        try {
+            FileUtils.copyInputStreamToFile(myFile.getInputStream(), uploadedFile);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
         }
