@@ -75,7 +75,9 @@ public class ImageController {
         modelAndView.addObject("code", 0);
         if (!myFile.isEmpty()) {
             String fileName = processUploadedFile(myFile);
-            modelAndView.addObject("data", IMAGE_SERVER + "/o/" + fileName);
+            Map<String, String> map = new HashMap<String, String>();
+            map.put("image", new StringBuilder().append(IMAGE_SERVER).append("/o/").append(fileName).toString());
+            modelAndView.addObject("data", JSON.toJSONString(map));
         } else {
             modelAndView.addObject("code", 1);
             modelAndView.addObject("message", "file is null");
@@ -91,10 +93,10 @@ public class ImageController {
         if (!myFile.isEmpty()) {
             String fileName = processUploadedAvatar(myFile);
             Map<String, String> map = new HashMap<String, String>();
-            map.put("origin", IMAGE_SERVER + "/o/" + fileName);
-            map.put("avatar", IMAGE_SERVER + "/l/" + fileName);
-            map.put("image", IMAGE_SERVER + "/m/" + fileName);
-            map.put("icon", IMAGE_SERVER + "/s/" + fileName);
+            map.put("origin", new StringBuilder().append(IMAGE_SERVER).append("/o/").append(fileName).toString());
+            map.put("avatar", new StringBuilder().append(IMAGE_SERVER).append("/l/").append(fileName).toString());
+            map.put("image", new StringBuilder().append(IMAGE_SERVER).append("/m/").append(fileName).toString());
+            map.put("icon", new StringBuilder().append(IMAGE_SERVER).append("/s/").append(fileName).toString());
             modelAndView.addObject("data", JSON.toJSONString(map));
 
         } else {
