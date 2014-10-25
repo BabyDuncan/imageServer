@@ -14,6 +14,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
+import java.net.URLEncoder;
 import java.util.List;
 
 /**
@@ -48,14 +49,19 @@ public class ImageController {
         modelAndView.setViewName("image");
         modelAndView.addObject("code", 0);
         List<String> fileNames = Lists.newArrayList();
-        for (MultipartFile myFile : myFiles) {
-            if (myFile.isEmpty()) {
-                continue;
+        if (myFiles.length > 0) {
+            for (MultipartFile myFile : myFiles) {
+                if (myFile.isEmpty()) {
+                    continue;
+                }
+                String fileName = processUploadedFile(myFile);
+                fileNames.add(fileName);
             }
-            String fileName = processUploadedFile(myFile);
-            fileNames.add(fileName);
+            modelAndView.addObject("data", fileNames);
+        } else {
+            modelAndView.addObject("code", 1);
+            modelAndView.addObject("message", "file is null");
         }
-        modelAndView.addObject("data", fileNames);
         return modelAndView;
     }
 
@@ -67,6 +73,9 @@ public class ImageController {
         if (!myFile.isEmpty()) {
             String fileName = processUploadedFile(myFile);
             modelAndView.addObject("data", fileName);
+        } else {
+            modelAndView.addObject("code", 1);
+            modelAndView.addObject("message", "file is null");
         }
         return modelAndView;
     }
@@ -79,12 +88,15 @@ public class ImageController {
         if (!myFile.isEmpty()) {
             String fileName = processUploadedAvatar(myFile);
             modelAndView.addObject("data", fileName);
+        } else {
+            modelAndView.addObject("code", 1);
+            modelAndView.addObject("message", "file is null");
         }
         return modelAndView;
     }
 
     private String processUploadedAvatar(MultipartFile myFile) {
-        String fileName__ = new StringBuilder().append(IMAGE_PREFIX).append(System.currentTimeMillis()).append(myFile.getOriginalFilename()).toString();
+        String fileName__ = new StringBuilder().append(IMAGE_PREFIX).append(System.currentTimeMillis()).append(URLEncoder.encode(myFile.getOriginalFilename())).toString();
         File uploadedFile = new File(new StringBuilder().append(IMAGE_DIR).append("/o/").append(fileName__).toString());
         String uploadedFile175 = new StringBuilder().append(IMAGE_DIR).append("/l/").append(fileName__).toString();
         String uploadedFile95 = new StringBuilder().append(IMAGE_DIR).append("/m/").append(fileName__).toString();
@@ -107,7 +119,7 @@ public class ImageController {
     }
 
     private String processUploadedFile(MultipartFile myFile) {
-        String fileName__ = new StringBuilder().append(IMAGE_PREFIX).append(System.currentTimeMillis()).append(myFile.getOriginalFilename()).toString();
+        String fileName__ = new StringBuilder().append(IMAGE_PREFIX).append(System.currentTimeMillis()).append(URLEncoder.encode(myFile.getOriginalFilename())).toString();
         File uploadedFile = new File(new StringBuilder().append(IMAGE_DIR).append("/o/").append(fileName__).toString());
         try {
             FileUtils.copyInputStreamToFile(myFile.getInputStream(), uploadedFile);
