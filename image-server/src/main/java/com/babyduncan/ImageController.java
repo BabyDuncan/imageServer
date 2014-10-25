@@ -14,7 +14,6 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
-import java.net.URLEncoder;
 import java.util.List;
 
 /**
@@ -96,7 +95,7 @@ public class ImageController {
     }
 
     private String processUploadedAvatar(MultipartFile myFile) {
-        String fileName__ = new StringBuilder().append(IMAGE_PREFIX).append(System.currentTimeMillis()).append(URLEncoder.encode(myFile.getOriginalFilename())).toString();
+        String fileName__ = new StringBuilder().append(IMAGE_PREFIX).append(System.currentTimeMillis()).toString();
         File uploadedFile = new File(new StringBuilder().append(IMAGE_DIR).append("/o/").append(fileName__).toString());
         String uploadedFile175 = new StringBuilder().append(IMAGE_DIR).append("/l/").append(fileName__).toString();
         String uploadedFile95 = new StringBuilder().append(IMAGE_DIR).append("/m/").append(fileName__).toString();
@@ -119,7 +118,7 @@ public class ImageController {
     }
 
     private String processUploadedFile(MultipartFile myFile) {
-        String fileName__ = new StringBuilder().append(IMAGE_PREFIX).append(System.currentTimeMillis()).append(URLEncoder.encode(myFile.getOriginalFilename())).toString();
+        String fileName__ = new StringBuilder().append(IMAGE_PREFIX).append(System.currentTimeMillis()).toString();
         File uploadedFile = new File(new StringBuilder().append(IMAGE_DIR).append("/o/").append(fileName__).toString());
         try {
             FileUtils.copyInputStreamToFile(myFile.getInputStream(), uploadedFile);
