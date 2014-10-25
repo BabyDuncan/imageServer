@@ -27,7 +27,7 @@ public class ImageController {
     private static final String IMAGE_PREFIX = "image";
     private static final String IMAGE_DIR = "/opt/image";
 
-    @RequestMapping(value = "/index", method = RequestMethod.GET)
+    @RequestMapping(value = "/imageserver/index", method = RequestMethod.GET)
     public ModelAndView index(HttpServletRequest request, HttpServletResponse response) {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("index");
@@ -42,7 +42,7 @@ public class ImageController {
      * @param response
      * @return
      */
-    @RequestMapping(value = "/uploadFiles", method = RequestMethod.POST)
+    @RequestMapping(value = "/imageserver/uploadFiles", method = RequestMethod.POST)
     public ModelAndView uploadMultiPartImages(@RequestParam MultipartFile[] myFiles, HttpServletRequest request, HttpServletResponse response) throws FileUploadException {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("image");
@@ -59,7 +59,7 @@ public class ImageController {
         return modelAndView;
     }
 
-    @RequestMapping(value = "/uploadFile", method = RequestMethod.POST)
+    @RequestMapping(value = "/imageserver/uploadFile", method = RequestMethod.POST)
     public ModelAndView uploadMultiPartImage(@RequestParam MultipartFile myFile, HttpServletRequest request, HttpServletResponse response) throws FileUploadException {
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("image");
@@ -95,7 +95,7 @@ public class ImageController {
     }
 
 
-    @RequestMapping(value = "uploadStream", method = RequestMethod.POST)
+    @RequestMapping(value = "/imageserver/uploadStream", method = RequestMethod.POST)
     public ModelAndView uploadImageStream(HttpServletRequest request, HttpServletResponse response) {
         ModelAndView modelAndView = new ModelAndView();
         return modelAndView;
